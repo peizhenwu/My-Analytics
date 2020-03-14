@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dashboard</title>
+        <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-functions.js"></script>
+        <script src="https://cdn.zinggrid.com/zinggrid.min.js"></script>
+    </head>
+    <body id="id_body">
+        <header>
+            <h1>Analytics System</h1>
+            <nav>
+                <ul>
+                    <li id="accountBtn">Account Info</li>
+                    <li id="userManageBtn" class="admin" hidden>User Management</li>
+                    <li id="logoutBtn">Logout</li>
+                </ul>
+            </nav>
+        </header>
+
+        <dialog id="accountDialog">
+            <h2>Account Info</h2>
+            <div id="displayName">
+                <div id="name"><h3>Welcome, New user!</h3><a>click here to set your username</a></div>
+                <div hidden id="newName"><input type="text" maxlength="20"><button>Set Username</button></div>
+            </div>
+            <div>
+                <p id="email">Email: </p>
+                <p id="password">Password: ******** (<a>change</a>)</p>
+                <p id="role">Role: </p>
+                <p id="creationTime">Account Created: </p>
+                <p id="lastSignin">Last Sign In: </p>
+                <button id="closeAccountBtn">OK</button>
+            </div>
+        </dialog>
+        <dialog id="resetPwd">
+            <input id="pwd" type="password" placeholder="Password" minlength="6"><br>
+            <input id="pwd2" type="password" placeholder="Confirm Password" minlength="6"><br>
+            <p id="errorMsg"></p>
+            <button id="submitBtn">Submit</button>
+            <button id="cancelBtn">Cancel</button>
+        </dialog>
+
+        <h2>Dashboard</h2>
+
+        <div id="userManageDiv" class="admin" hidden>
+            <zing-grid 
+            caption="User Management"
+            editor="modal" 
+            layout="row" 
+            layout-controls="disabled" 
+            viewport-stop>
+            <zg-data data=""></zg-data>
+            <zg-colgroup>
+              <!-- default columns -->
+              <zg-column index="uid"></zg-column>
+              <zg-column index="name"></zg-column>
+              <zg-column index="email"></zg-column>
+              <zg-column index="role"></zg-column>
+              <!-- custom column for delete button -->
+              <zg-column index="custom" header="Action" editor="false">
+                  <zg-button onclick="editUser(this)">Edit</zg-button>
+                  <zg-button onclick="deleteUser(this)">Delete</zg-button>
+              </zg-column>
+            </zg-colgroup>
+          </zing-grid>
+        </div>
+
+        <dialog id="userDialog">
+            <div>
+                <h2>User Info</h2>
+                <button>Disable User</button>
+                <button>Delete User</button>
+            </div>
+            <form>
+                <h3></h3>
+                <label id="userEmail">Email: </label><br>
+                <label>Role: </label>
+                <select name="userRole" id="userRole">
+                    <option value="admin">Admin</option>
+                    <option value="analyst">Analyst</option>
+                    <option value="user">User</option>
+                </select><br>
+
+                <label id="userCreationTime">Account Created: </label><br>
+                <label id="userLastSignin">Last Sign In: </label><br>
+                <button id="closeUserBtn">OK</button>
+            </form>
+        </dialog>
+
+        <script src="dashboard.js"> </script>
+    </body>
+</html>

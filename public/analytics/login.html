@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Analytics Login</title>
+    </head>
+    <body id="id_body">
+        <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>
+        
+        <ul> 
+            <li><input id="email" type="email" placeholder="email"></li>
+            <li><input id="password" type="password" placeholder="password"></li>
+            <p id="loginErrorMsg"></p>
+            <li><button id ="loginBtn">Login</button></li>
+            <li><button id="signUpDialogBtn">SignUp</button></li>
+        </ul> 
+        <dialog id="signUp">
+            <h2>Sign Up</h2>
+            <input id="signUpEmail" type="email" placeholder="Email"><br>
+            <input id="signUpPwd" type="password" placeholder="Password" minlength="6"><br>
+            <input id="signUpPwd2" type="password" placeholder="Confirm Password" minlength="6"><br>
+            <p id="signupErrorMsg"></p>
+            <button id="signUpBtn">SignUp</button>
+            <button id="cancelBtn">Cancel</button>
+        </dialog>
+        <script src="login.js"> </script>
+        
+    </body>
+</html>
