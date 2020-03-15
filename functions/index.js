@@ -42,7 +42,7 @@ exports.collect = functions.https.onRequest((request, response) => {
 
     let key = `${id},${time}`
 
-    let browsersDoc = db.collection('browsers').doc(key);
+    let browsersDoc = db.collection('browsers').doc(id);
     browsersDoc.set(browsers);
     let speedDoc = db.collection('speed').doc(key);
     speedDoc.set(speed);
@@ -124,25 +124,6 @@ exports.deleteUser = functions.https.onCall((data, context) => {
     });
 })
 exports.browsers = functions.https.onCall((data, context) =>{
-    // if(context.auth.token.analyst !== true){
-    //     return { error: "Access Denied! Only analysts can view this page."}
-    // }
-    // let targetCollection = db.collection('browsers');
-    // let documents = [];
-    // // get all collections
-    // return targetCollection.get().then(snapshot => {
-    //     if (snapshot.empty) {
-    //         return { error: "No matching documents."};
-    //     }
-    //     snapshot.forEach(doc => {
-    //         documents.push(doc.data());
-    //     });
-    //     return {response: JSON.stringify(documents)};
-    // })
-    // .catch(err => {
-    //     console.log('Error getting documents', err);
-    //     return { error : "DB Error"}
-    // });
     return getFirestoreData(context, 'browsers')
 });
 
@@ -152,7 +133,7 @@ exports.speed = functions.https.onCall((data, context) =>{
 });
 
 function getFirestoreData(context, collection){
-    if(context.auth.token.role !== "analyst"){
+    if(context.auth.token.role !== "analyst" && context.auth.token.role !== "admin"){
         return { error: "Access Denied! Only analysts can view this page."}
     }
     let targetCollection = db.collection(collection);

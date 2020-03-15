@@ -151,6 +151,7 @@ function showUsers(data){
         user.role = data[i].customClaims.role;
         result.push(user);
     }
+    console.log(JSON.stringify(result));
     document.querySelector("#userManageDiv zg-data").data = JSON.stringify(result);
     document.getElementById("userManageDiv").hidden = false; 
     document.querySelector("#userManageDiv zing-grid").refresh();
@@ -208,3 +209,200 @@ function deleteUser(event){
     })
 }
 
+//////////////////////////////////////////////    User Report    /////////////////////////////////////////////////////
+const userReportBtn = document.getElementById("userReportBtn");
+userReportBtn.addEventListener('click', showUserReport);
+
+function showUserReport(){
+    const getBrowsers = functions.httpsCallable('browsers');
+    getBrowsers().then(res =>{
+        console.log(res);
+        if(res.data.error){
+            alert(res.data.error);
+            return;
+        }else if(res.data.response === undefined){
+            console.log("Error!");
+            return;
+        }
+        let result = JSON.parse(res.data.response);
+        document.querySelector("#userReport zg-data").data = JSON.stringify(result);
+        drawCharts(result);
+    });
+    document.getElementById("menu").hidden = true;
+    document.getElementById("userReport").hidden = false;
+    document.querySelector("#userReport zing-grid").refresh();
+}
+
+function drawCharts(data){
+    let browsers = {};
+    let os = {};
+    let columnData = [];
+    // format browser pie chart data
+    for(var i=0;i<data.length;i++){
+        let ua = data[i].userAgent;
+        if(browsers[ua] === undefined){
+            browsers[ua] = 1;
+        }else{
+            browsers[ua] += 1;
+        }
+
+        let o = data[i].OS;
+        if(os[o] === undefined){
+            os[o] = 1;
+        }else{
+            os[o] += 1;
+        }
+
+    }
+    let browserPieData = [];
+    let browserColumnData = [];
+    for (let [key, value] of Object.entries(browsers)) {
+        let b = {};
+        b.name = key;
+        b.y = value/data.length;
+        browserPieData.push(b);
+
+        let c = {};
+        c.name = key;
+        c.data = [value];
+        browserColumnData.push(c);
+
+    }
+    let osPieData = [];
+    for (let [key, value] of Object.entries(os)) {
+        let b = {};
+        b.name = key;
+        b.y = value/data.length;
+        osPieData.push(b);
+    }
+
+    renderBrowserPieChart(browserPieData);
+    renderOSPieChart(osPieData);
+    browserColumnData.sort((a,b)=>(a.data[0] > b.data[0])?-1:1);
+    let browsersCategories = [];
+    let browsersData = [];
+    for(var i=0;i<browserColumnData.length;i++){
+        browsersCategories.push(browserColumnData[i].name);
+        browsersData.push(browserColumnData[i].data);
+    }
+    renderBrowserColumnChart(browsersCategories,browsersData);
+
+}
+function renderBrowserPieChart(chartData){
+    Highcharts.chart('browserPieChart', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Browser Distribution'
+        },
+        tooltip: {
+            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            name: 'Browser',
+            colorByPoint: true,
+            data: chartData
+        }]
+    });
+}
+function renderOSPieChart(chartData){
+    Highcharts.chart('osPieChart', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Operating System Distribution'
+        },
+        tooltip: {
+            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            name: 'Operating System',
+            colorByPoint: true,
+            data: chartData
+        }]
+    });
+}
+function renderBrowserColumnChart(browsersCategories,browsersData){
+    Highcharts.chart('browserColumnChart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Browsers'
+        },
+        xAxis: {
+            categories: browsersCategories,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Users'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Browsers',
+            data: browsersData
+    
+        }]
+    });
+}
+//////////////////////////////////////////////    Performance Report    /////////////////////////////////////////////////////
+const performanceReportBtn = document.getElementById("performanceReportBtn");
+performanceReportBtn.addEventListener('click', showPerformanceReport);
+
+function showPerformanceReport(){
+    
+}
