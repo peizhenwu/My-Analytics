@@ -47,11 +47,6 @@ function displayUI(user){
     document.getElementById("creationTime").innerText += user.metadata.creationTime;
     document.getElementById("lastSignin").innerText += user.metadata.lastSignInTime;
     document.getElementById("role").innerText += user.role;
-    if(user.role){
-        document.getElementById("role").innerText += user.role;
-    }else{
-        document.getElementById("role").innerText += "user";
-    }
 
     if(user.displayName){
         document.getElementById("name").innerHTML = `<h3>${user.displayName}</h3>`;
@@ -169,10 +164,10 @@ function editUser(event){
 }
 
 function showUserDialog(user){
-    document.querySelector("#userDialog h4").innerText += user.displayName;
-    document.getElementById("userEmail").innerText += user.email;
-    document.getElementById("userCreationTime").innerText += user.metadata.creationTime;
-    document.getElementById("userLastSignin").innerText += user.metadata.lastSignInTime;
+    document.querySelector("#userDialog h4").innerText = user.displayName;
+    document.getElementById("userEmail").innerText = `Email: ${user.email}`;
+    document.getElementById("userCreationTime").innerText = `Account Created: ${user.metadata.creationTime}`;
+    document.getElementById("userLastSignin").innerText = `Last Sign In: ${user.metadata.lastSignInTime}`;
 
     if(user.customClaims.role){
         document.getElementById("userRole").value = user.customClaims.role;
@@ -218,8 +213,7 @@ getSpeedLog().then(res =>{
         return;
     }
     dashboard.speed = JSON.parse(res.data.response);
-    drawOverviewLineChart(dashboard.speed);
-    drawOverviewScatterChart(dashboard.speed);
+    drawOverviewCharts(dashboard.speed);
 });
 getBrowserLog().then(res =>{
     console.log(res);
@@ -231,11 +225,17 @@ getBrowserLog().then(res =>{
         return;
     }
     dashboard.browsers = JSON.parse(res.data.response);
+    document.querySelector("#userMenu p").outerHTML = `<p>Most used browser by visitors: Chrome</p>
+    <p>Most used OS by visitors: Mac OS</p><br>`
 });
 
-function drawOverviewLineChart(data){
+function drawOverviewCharts(data){
     let visitCount = {};
+    let scatterData = [];
+    let domTime = 0;
+    let totalTime = 0;
     for(var i=0;i<data.length;i++){
+        // line chart data
         let d = new Date(parseInt(data[i]['Date-Time']));
         let date = `${d.getMonth()+1}/${d.getDate()}`;
         if(visitCount[date] === undefined){
@@ -243,7 +243,19 @@ function drawOverviewLineChart(data){
         }else{
             visitCount[date] +=1;
         }
+        // scatter chart data
+        let hour = parseInt(data[i]['Date-Time']);
+        let time = Math.ceil(data[i].visit/60000);
+        scatterData.push([hour, time]);
+
+        // speed summmary
+        domTime += data[i].dom;
+        totalTime += data[i].total;
     }
+    domTime /= data.length;
+    totalTime /= data.length;
+    document.querySelector("#speedMenu p").outerHTML = `<p>Average DOM Loading in ${Math.ceil(domTime)}ms</p>
+    <p>Average Page Loading in ${Math.ceil(totalTime)}ms</p><br>`
     Highcharts.chart('overviewLineChart', {
 
         title: {
@@ -291,14 +303,6 @@ function drawOverviewLineChart(data){
     
     });
 
-}
-function drawOverviewScatterChart(data){
-    let scatterData = [];
-    for(var i=0;i<data.length;i++){
-        let hour = parseInt(data[i]['Date-Time']);
-        let time = Math.ceil(data[i].visit/60000);
-        scatterData.push([hour, time]);
-    }
     Highcharts.chart('overviewScatterChart', {
         chart: {
           type: 'scatter',
@@ -353,6 +357,9 @@ function drawOverviewScatterChart(data){
 //////////////////////////////////////////////    User Report    /////////////////////////////////////////////////////
 const userReportBtn = document.getElementById("userReportBtn");
 userReportBtn.addEventListener('click', showUserReport);
+
+const userMenu = document.querySelector("#userMenu a");
+userMenu.addEventListener('click', showUserReport);
 
 function showUserReport(){
     const getBrowsers = functions.httpsCallable('browsers');
@@ -546,6 +553,8 @@ function renderBrowserColumnChart(browsersCategories,browsersData){
 //////////////////////////////////////////////    Performance Report    /////////////////////////////////////////////////////
 const performanceReportBtn = document.getElementById("performanceReportBtn");
 performanceReportBtn.addEventListener('click', showPerformanceReport);
+const speedMenu = document.querySelector("#speedMenu a");
+speedMenu.addEventListener('click', showPerformanceReport);
 
 function showPerformanceReport(){
     const getSpeed = functions.httpsCallable('speed');

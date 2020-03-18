@@ -14,8 +14,7 @@ h1{
 }
 header, .form{
     margin: auto;
-    width: 60%;
-
+    width: 400px;
     padding: 25px;
     text-align: center;
 }
@@ -23,16 +22,17 @@ header, .form{
     background-color: white;
     border-radius: 10px;
     color: black;
+    margin: auto;
 }
 input{
     position: inherit;
     line-height: 2;
-    width: 60%;
-    height: 60%;
-    padding: 10px;
+    width: 200px;
+    height: 15px;
+    padding: 20px;
     margin: 10px;
     border-radius: 50px;
-    font-size: 20px;
+    font-size: x-large;
 }
 button{
     width: 100px;
@@ -50,7 +50,6 @@ button:hover{
 }
 
 dialog{
-    width: 60%;
-    height: 65%;
+    width: 600px;
     border-radius: 10px;
 }

@@ -43,12 +43,22 @@ h2{
     padding: 50px;
     font-size: xx-large;
 }
-.chart{
+.chart, .report{
     width: 30%;
     height: 250px;
-    margin: 0px 100px;
+    margin: 10px 100px;
+    text-align: center;
 }
-.charts{
+.report{
+    padding-top: 20px;
+    border: #ccccff solid;
+    border-radius: 10px;
+}
+.report p{
+    color: gray;
+    font-size: small;
+}
+.charts, #menu{
     display: flex;
     flex-direction: row;
 }
@@ -58,15 +68,18 @@ h2{
 }
 input{
     line-height: 2;
-    width: 40%;
+    width: 150px;
+    height: 20px;
     padding: 10px;
-    margin: 10px;
+    margin: 5px 0px;
     border-radius: 50px;
+    font-size: medium;
 }
 button{
     width: 100px;
+    height: 40px;
     font-size: 20px;
-    padding: 15px;
+    padding: 10px 15px;
     margin: 5px 10px;
     border-radius: 30px;
     background-color: #9966CC;
@@ -83,10 +96,21 @@ dialog{
     padding: 50px;
     text-align: left;
     line-height: 2;
-    width: 30%;
-    height: 40%;
+    max-width: 30%;
+    max-height: 40%;
     border-radius: 10px;
 }
 #resetPwd{
     text-align: center;
+}
+
+img{
+    max-width: 100px;
+    max-height: 100px;
+}
+li:hover, a:hover, button:hover{
+    cursor: pointer;
+}
+a{
+    text-decoration: underline;
 }

@@ -54,7 +54,11 @@ exports.collect = functions.https.onRequest((request, response) => {
 exports.processSignUp = functions.auth.user().onCreate((user) => {
     // check if new user meets admin criteria
     if (user.email === undefined || (user.email !== 'pew047@ucsd.edu' && !user.email.endsWith("@cse.135"))) {
-        return 1;
+        return admin.auth().getUserByEmail(user.email).then(user => {
+            return admin.auth().setCustomUserClaims(user.uid, {
+                role: "user"
+            });
+        })
     }
     return admin.auth().getUserByEmail(user.email).then(user => {
         return admin.auth().setCustomUserClaims(user.uid, {

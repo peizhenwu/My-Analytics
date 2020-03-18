@@ -21,7 +21,7 @@
                     <li id="accountBtn">Account</li>
                     <li id="userManageBtn" class="admin" hidden>Setting</li>
                     <li id="userReportBtn">User Report</li>
-                    <li id="performanceReportBtn">Performance Report</li>
+                    <li id="performanceReportBtn">Speed Report</li>
                     <li id="logoutBtn">Logout</li>
                 </ul>
             </nav>
@@ -30,7 +30,7 @@
         <dialog id="accountDialog">
             <div id="displayName">
                 <div id="name"><h3>Welcome, New user!</h3><a>click here to set your username</a></div>
-                <div hidden id="newName"><input type="text" maxlength="20"><button>Set Username</button></div>
+                <div hidden id="newName"><input type="text" maxlength="20"><button>Set</button></div>
             </div>
             <div>
                 <p id="email">Email: </p>
@@ -76,12 +76,9 @@
         </div>
 
         <dialog id="userDialog">
-            <div>
-                <h3>User Info</h3><br>
-            </div>
             <form>
                 <h4></h4>
-                <label id="userEmail">Email: </label><br>
+                <label id="userEmail"></label><br>
                 <label>Role: </label>
                 <select name="userRole" id="userRole">
                     <option value="admin">Admin</option>
@@ -89,8 +86,8 @@
                     <option value="user">User</option>
                 </select><br>
 
-                <label id="userCreationTime">Account Created: </label><br>
-                <label id="userLastSignin">Last Sign In: </label><br>
+                <label id="userCreationTime"></label><br>
+                <label id="userLastSignin"></label><br>
                 <button id="closeUserBtn">OK</button>
             </form>
         </dialog>
@@ -102,15 +99,17 @@
             </div>
     
             <div id="menu">
-                <div>
-                    <h3>User Report</h3>
-                    <div>
-                    </div>
+                <div id="userMenu" class="report">
+                    <h3>User Report</h3><br>
+                    <img src="../media/analyst.png">
+                    <p></p>
+                    <a>View Details</a>
                 </div>
-                <div>
-                    <h3>Performance Report</h3>
-                    <div>
-                    </div>
+                <div id="speedMenu" class="report">
+                    <h3>Speed Report</h3><br>
+                    <img src="../media/speed.png">
+                    <p></p>
+                    <a>View Details</a>
                 </div>
             </div>
         </div>
