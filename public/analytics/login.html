@@ -4,28 +4,36 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Analytics Login</title>
+        <link rel="stylesheet" href="../style/login.css">
     </head>
     <body id="id_body">
         <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>
-        
-        <div> 
+        <header>
             <h1>Analytics System</h1>
-            <input id="email" type="email" placeholder="email"><br>
-            <input id="password" type="password" placeholder="password"><br>
+        </header>
+        
+        <div class="form"> 
+            <h2>Login</h2>
+            <input id="email" type="email" placeholder="Email"><br>
+            <input id="password" type="password" placeholder="Password"><br>
             <p id="loginErrorMsg"></p>
             <button id ="loginBtn">Login</button>
-            <button id="signUpDialogBtn">SignUp</button>
+            <button id="signUpDialogBtn">Sign Up</button>
         </div> 
         <dialog id="signUp">
-            <h2>Sign Up</h2>
-            <input id="signUpEmail" type="email" placeholder="Email"><br>
-            <input id="signUpPwd" type="password" placeholder="Password" minlength="6"><br>
-            <input id="signUpPwd2" type="password" placeholder="Confirm Password" minlength="6"><br>
-            <p id="signupErrorMsg"></p>
-            <button id="signUpBtn">SignUp</button>
-            <button id="cancelBtn">Cancel</button>
+            <header>
+                <h2>Sign Up</h2>
+            </header>
+            <div class="form"> 
+                <input id="signUpEmail" type="email" placeholder="Email"><br>
+                <input id="signUpPwd" type="password" placeholder="Password" minlength="6"><br>
+                <input id="signUpPwd2" type="password" placeholder="Confirm Password" minlength="6"><br>
+                <p id="signupErrorMsg"></p>
+                <button id="signUpBtn">Sign Up</button>
+                <button id="cancelBtn">Cancel</button>
+            <div class="form"> 
         </dialog>
         <script src="login.js"> </script>
         

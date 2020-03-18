@@ -169,7 +169,7 @@ function editUser(event){
 }
 
 function showUserDialog(user){
-    document.querySelector("#userDialog h3").innerText += user.displayName;
+    document.querySelector("#userDialog h4").innerText += user.displayName;
     document.getElementById("userEmail").innerText += user.email;
     document.getElementById("userCreationTime").innerText += user.metadata.creationTime;
     document.getElementById("userLastSignin").innerText += user.metadata.lastSignInTime;
@@ -576,8 +576,8 @@ function drawPerformanceCharts(data){
     let chartCategories = [];
     let dom = [];
     let total = [];
-    let count = (data.length > 10)? 10:data.length;
-    for(var i=0;i<count;i++){
+    let start = (data.length > 10)? data.length-11:0;
+    for(var i=start;i<data.length;i++){
         chartCategories.push(data[i]['Date-Time']);
         dom.push(data[i].dom);
         total.push(data[i].total);
@@ -635,30 +635,24 @@ function drawPerformanceLine(data){
     let domAvg = [];
     let totalAvg = [];
     let count = [];
-    let dateCategories = [];
-    let now = new Date();
-    for(var i=0;i<7;i++){
-        domAvg[i] = 0;
-        totalAvg[i] = 0;
-        count[i] = 0;
-        dateCategories.push(`${now.getMonth()+1}/${now.getDate()-7+i}`);
-    }
 
     for(var i=0;i<data.length;i++){
-        let time = data[i]['Date-Time'];
-        let date = now.getDate() - new Date(parseInt(time)).getDate();
-        if(date >= 8) break;
-        if(date > 0){
-            count[date-1] += 1;
-            domAvg[date-1] += data[i].dom;
-            totalAvg[date-1] += data[i].total;
+        let d = new Date(parseInt(data[i]['Date-Time']));
+        let date = `${d.getMonth()+1}/${d.getDate()}`;
+        if(count[date] === undefined){
+            count[date] = 1;
+            domAvg[date] = data[i].dom;
+            totalAvg[date] = data[i].total;
+        }else{
+            count[date] +=1;
+            domAvg[date] += data[i].dom;
+            totalAvg[date] += data[i].total;
         }
     }
-    for(var i=0;i<7;i++){
-        if(count[i] > 0){
-            domAvg[i] /= count[i];
-            totalAvg[i] /= count[i];
-        }
+    for(var i=0;i<count.length;i++){
+        let key = Object.keys(count)[i];
+        domAvg[key] /= count[key];
+        totalAvg[key] /= count[key];
     }
 
     Highcharts.chart('performanceLineChart', {
@@ -674,7 +668,7 @@ function drawPerformanceLine(data){
         },
     
         xAxis: {
-            categories: dateCategories,
+            categories: Object.keys(count),
             accessibility: {
                 rangeDescription: 'Date'
             }
@@ -688,10 +682,10 @@ function drawPerformanceLine(data){
     
         series: [{
             name: 'Total',
-            data: totalAvg
+            data: Object.values(totalAvg)
         }, {
             name: 'DOM',
-            data: domAvg
+            data: Object.values(domAvg)
         }],
     
         responsive: {

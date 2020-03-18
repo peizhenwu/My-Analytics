@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Dashboard</title>
+        <link rel="stylesheet" href="../style/dashboard.css">
         <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase-database.js"></script>
@@ -17,17 +18,16 @@
             <nav>
                 <ul>
                     <li id="homeBtn">Home</li>
-                    <li id="accountBtn">Account Info</li>
-                    <li id="userManageBtn" class="admin" hidden>User Management</li>
-                    <li id="logoutBtn">Logout</li>
+                    <li id="accountBtn">Account</li>
+                    <li id="userManageBtn" class="admin" hidden>Setting</li>
                     <li id="userReportBtn">User Report</li>
                     <li id="performanceReportBtn">Performance Report</li>
+                    <li id="logoutBtn">Logout</li>
                 </ul>
             </nav>
         </header>
 
         <dialog id="accountDialog">
-            <h2>Account Info</h2>
             <div id="displayName">
                 <div id="name"><h3>Welcome, New user!</h3><a>click here to set your username</a></div>
                 <div hidden id="newName"><input type="text" maxlength="20"><button>Set Username</button></div>
@@ -37,22 +37,23 @@
                 <p id="password">Password: ******** (<a>change</a>)</p>
                 <p id="role">Role: </p>
                 <p id="creationTime">Account Created: </p>
-                <p id="lastSignin">Last Sign In: </p>
+                <p id="lastSignin">Last Sign In: </p><br>
                 <button id="closeAccountBtn">OK</button>
             </div>
         </dialog>
         <dialog id="resetPwd">
             <input id="pwd" type="password" placeholder="Password" minlength="6"><br>
             <input id="pwd2" type="password" placeholder="Confirm Password" minlength="6"><br>
-            <p id="errorMsg"></p>
+            <p id="errorMsg"></p><br>
             <button id="submitBtn">Submit</button>
             <button id="cancelBtn">Cancel</button>
         </dialog>
 
+        <div id="board">
         <h2>Dashboard</h2>
 
         <div id="userManageDiv" class="admin" hidden>
-            <zing-grid 
+            <zing-grid class="grid"
             caption="User Management"
             editor="modal" 
             layout="row" 
@@ -76,12 +77,10 @@
 
         <dialog id="userDialog">
             <div>
-                <h2>User Info</h2>
-                <button>Disable User</button>
-                <button>Delete User</button>
+                <h3>User Info</h3><br>
             </div>
             <form>
-                <h3></h3>
+                <h4></h4>
                 <label id="userEmail">Email: </label><br>
                 <label>Role: </label>
                 <select name="userRole" id="userRole">
@@ -97,8 +96,10 @@
         </dialog>
 
         <div id="overview">
-            <div id="overviewLineChart" style="width:50%; height:200px;"></div>
-            <div id="overviewScatterChart" style="width:50%; height:200px;"></div>
+            <div class="charts">
+                <div id="overviewLineChart" class="chart"></div>
+                <div id="overviewScatterChart" class="chart"></div>
+            </div>
     
             <div id="menu">
                 <div>
@@ -115,10 +116,12 @@
         </div>
 
         <div id="userReport" hidden>
-            <div id="browserColumnChart" style="width:50%; height:200px;"></div>
-            <div id="browserPieChart" style="width:50%; height:200px;"></div>
-            <div id="osPieChart" style="width:50%; height:200px;"></div>
-            <div id="userReportGrid">
+            <div class="charts">
+            <div id="browserColumnChart" class="chart"></div>
+            <div id="browserPieChart" class="chart"></div>
+            <div id="osPieChart" class="chart"></div>
+            </div>
+            <div id="userReportGrid" class="grid">
                 <zing-grid 
                 caption="User Report"
                 sort
@@ -141,9 +144,11 @@
         </div>
 
         <div id="performanceReport" hidden>
-            <div id="performanceColumnChart" style="width:50%; height:200px;"></div>
-            <div id="performanceLineChart" style="width:50%; height:200px;"></div>
-            <div id="performanceReportGrid">
+            <div class="charts">
+            <div id="performanceColumnChart" class="chart"></div>
+            <div id="performanceLineChart" class="chart"></div>
+            </div>
+            <div id="performanceReportGrid" class="grid">
                 <zing-grid 
                 caption="Performance Report"
                 sort
@@ -163,7 +168,7 @@
                 </zing-grid>
             </div>
         </div>
-
+    </div>
         <script src="dashboard.js"> </script>
     </body>
 </html>

@@ -1,0 +1,92 @@
+* {
+    font-family: "Gill Sans", sans-serif;
+    color: #9966CC;
+    margin: 0px;
+}
+
+
+body{
+    background-image: url(../media/background2.jpg);
+    background-repeat: repeat;
+}
+h1{
+    color: #ccccff;
+    padding-left: 50px;
+}
+header {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 80px;
+    align-items: center;
+}
+ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    right: 50px;
+    top: 0px;
+    position: absolute;
+}
+li{
+    margin: 10px;
+    font-weight: bold;
+    padding: 20px;
+    height: 100%;
+}
+#board{
+    background-color: rgba(255,255,255,1);
+    width: 80%;
+    margin: auto;
+}
+h2{
+    padding: 50px;
+    font-size: xx-large;
+}
+.chart{
+    width: 30%;
+    height: 250px;
+    margin: 0px 100px;
+}
+.charts{
+    display: flex;
+    flex-direction: row;
+}
+.grid{
+    margin: auto;
+    width: 90%;
+}
+input{
+    line-height: 2;
+    width: 40%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 50px;
+}
+button{
+    width: 100px;
+    font-size: 20px;
+    padding: 15px;
+    margin: 5px 10px;
+    border-radius: 30px;
+    background-color: #9966CC;
+    color: white;
+    -o-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+}
+button:hover{
+    background-color: #ccccff;
+}
+
+dialog{
+    margin: auto;
+    padding: 50px;
+    text-align: left;
+    line-height: 2;
+    width: 30%;
+    height: 40%;
+    border-radius: 10px;
+}
+#resetPwd{
+    text-align: center;
+}

@@ -1,0 +1,56 @@
+* {
+    font-family: "Gill Sans", sans-serif;
+    color: #9966CC;
+}
+
+
+body{
+    margin: 30px 50px;
+    background-image: url(../media/background2.jpg);
+    background-repeat: repeat;
+}
+h1{
+    color: #ccccff;
+}
+header, .form{
+    margin: auto;
+    width: 60%;
+
+    padding: 25px;
+    text-align: center;
+}
+.form{
+    background-color: white;
+    border-radius: 10px;
+    color: black;
+}
+input{
+    position: inherit;
+    line-height: 2;
+    width: 60%;
+    height: 60%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 50px;
+    font-size: 20px;
+}
+button{
+    width: 100px;
+    font-size: 20px;
+    padding: 15px;
+    margin: 5px 10px;
+    border-radius: 30px;
+    background-color: #9966CC;
+    color: white;
+    -o-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+}
+button:hover{
+    background-color: #ccccff;
+}
+
+dialog{
+    width: 60%;
+    height: 65%;
+    border-radius: 10px;
+}

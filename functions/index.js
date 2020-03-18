@@ -16,8 +16,10 @@ exports.sessionize = functions.https.onRequest((request, response) => {
     setHeaders(response);
     var cookie = request.headers.cookie;
     if(cookie === undefined){
-        const uuidv4 = require("uuid/v4");
-        let value = "id="+uuidv4();
+        //const uuidv4 = require("uuid/v4");
+        //let value = "id="+uuidv4();
+        var id = Math.random().toString(36).substr(2, 9);
+        let value = "id="+id;
         response.setHeader('Content-Type', 'image/png');
         response.setHeader('Set-Cookie', `__session=${value}`);
     }
@@ -136,7 +138,7 @@ function getFirestoreData(context, collection){
     if(context.auth.token.role !== "analyst" && context.auth.token.role !== "admin"){
         return { error: "Access Denied! Only analysts can view this page."}
     }
-    let targetCollection = db.collection(collection);
+    let targetCollection = db.collection(collection).orderBy("Date-Time", "asc");
     let documents = [];
     // get all collections
     return targetCollection.get().then(snapshot => {
