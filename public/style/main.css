@@ -1,0 +1,60 @@
+* {
+    font-family: "Gill Sans", sans-serif;
+    color: rgb(240, 197, 173);
+}
+
+
+body{
+    margin: 30px 50px;
+    background-image: url(../media/background2.jpg);
+    background-repeat: repeat;
+}
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 50px;
+}
+#mypic{
+    padding-left: 20px;
+}
+#quote{
+    padding-top: 20px;
+    padding-left: 50px;
+    font-style: italic;
+    
+}
+
+main{
+    padding: 20px 50px;
+}
+#about{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: solid rgb(252, 235, 190);
+    border-radius: 15px;
+    border-width: 5px;
+    padding: 20px;
+}
+
+.subtitle{
+    text-decoration: underline;
+    
+}
+
+#interest{
+    padding: 20px;
+    
+}
+
+details p{
+    text-indent: 30px;
+}
+summary{
+    font-weight: bold;
+}
+footer > *{
+    padding-left: 50px;   
+}
+

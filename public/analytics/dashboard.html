@@ -16,6 +16,7 @@
             <h1>Analytics System</h1>
             <nav>
                 <ul>
+                    <li id="homeBtn">Home</li>
                     <li id="accountBtn">Account Info</li>
                     <li id="userManageBtn" class="admin" hidden>User Management</li>
                     <li id="logoutBtn">Logout</li>
@@ -95,24 +96,21 @@
             </form>
         </dialog>
 
-        <div id="menu">
-            <div>
-                <h3>Site Report</h3>
+        <div id="overview">
+            <div id="overviewLineChart" style="width:50%; height:200px;"></div>
+            <div id="overviewScatterChart" style="width:50%; height:200px;"></div>
+    
+            <div id="menu">
                 <div>
+                    <h3>User Report</h3>
+                    <div>
+                    </div>
                 </div>
-                <a href="">View Details</a>
-            </div>
-            <div>
-                <h3>User Report</h3>
                 <div>
+                    <h3>Performance Report</h3>
+                    <div>
+                    </div>
                 </div>
-                <a href="">View Details</a>
-            </div>
-            <div>
-                <h3>Performance Report</h3>
-                <div>
-                </div>
-                <a href="">View Details</a>
             </div>
         </div>
 
@@ -137,6 +135,30 @@
                         <zg-column index="OS"></zg-column>
                         <zg-column index="language"></zg-column>
                         <zg-column index="connectionType"></zg-column>
+                    </zg-colgroup>
+                </zing-grid>
+            </div>
+        </div>
+
+        <div id="performanceReport" hidden>
+            <div id="performanceColumnChart" style="width:50%; height:200px;"></div>
+            <div id="performanceLineChart" style="width:50%; height:200px;"></div>
+            <div id="performanceReportGrid">
+                <zing-grid 
+                caption="Performance Report"
+                sort
+                search
+                pager
+                page-size="5"
+                page-size-options="5,10,15"
+                layout="row"
+                viewport-stop>
+                    <zg-data data=""></zg-data>
+                    <zg-colgroup>
+                        <zg-column index="Date-Time"></zg-column>
+                        <zg-column index="UserId"></zg-column>
+                        <zg-column index="total"></zg-column>
+                        <zg-column index="dom"></zg-column>
                     </zg-colgroup>
                 </zing-grid>
             </div>

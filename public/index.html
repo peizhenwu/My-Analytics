@@ -1,13 +1,67 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Homepage</title>
-    <script type="module" src="script/ua-parser.min.js"></script>
-    <script type="module" src="script/tracker.js"></script>
-  </head>
-  <body>
-    <h1>Welcome to My Page</h1>
-  </body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Index</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style/main.css">
+        <noscript>
+            <img src="https://us-central1-my-analytics-3ed6f.cloudfunctions.net/sessionize" height=1 width=1 />
+        </noscript>
+    </head>
+    <body>
+        <header>
+            <div>
+                <h1>Hi, I'm Peizhen</h1>
+                <p id="quote"><i>"If you love life, life will love you back." -- Arthur Rubinstein</i></p>
+            </div>    
+        </header>
+
+        <main>
+            <div id="about">
+                <div>
+                    <h2 class="subtitle">About Me</h2>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;My name is Peizhen. I'm a fourth year Computer Science at UC San Diego. 
+                    Living in San Diego for three years, I love the sunshine, the beaches and the people here so much.</p>
+                </div>
+                <img id="mypic" src="media/profile.jpg" alt="No Image" width="120" height="150">
+            </div>
+            <div id="interest">
+                <h2 class="subtitle">Interests</h2>
+                <section>
+                    <details open>
+                        <summary>Cooking</summary>
+                        <p>
+                            For me, cooking is not just fun and delicous but it is a <em>social activity</em>. 
+                            Cooking with friends and sharing the dishes with them cannot be happier than 
+                            anything else!
+                        </p>
+                    </details>
+                </section>
+
+                <section>
+                    <details open>
+                        <summary>Traveling</summary> 
+                        <p>
+                            <em>Traveling helps open my mind.</em> I realize that there’s no one way to live life.
+                            I hope I can travel more places(Cancun, Florida, etc) this year!
+                        </p>
+                    </details>
+                </section>
+
+                <section>
+                    <details open>
+                        <summary>Programming</summary> 
+                        <p>Programming is interesting(maybe?). The programming language I use the most is Java. </p><hr>
+                    </details>
+                </section>
+            </div>
+            
+        </main>
+        <footer>
+            <h3>My Contact</h3>
+            <address>xxxxxx@ucsd.edu</address><br>
+        </footer>
+    </body>
 </html>

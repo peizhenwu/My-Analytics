@@ -28,20 +28,17 @@ firebase.auth().onAuthStateChanged( user => {
 
 const functions = firebase.functions();
 
+dashboard = {};
 const account = document.getElementById("accountBtn");
 const logout = document.getElementById("logoutBtn");
 const accountInfo = document.getElementById("accountDialog");
 const closeAccount = document.getElementById("closeAccountBtn");
+const home = document.getElementById("homeBtn");
 
 account.addEventListener('click', function(){accountInfo.showModal()});
 logout.addEventListener('click', e => {firebase.auth().signOut();});
 closeAccount.addEventListener('click', function(){accountInfo.close()});
-
-
-
-
-
-
+home.addEventListener('click', function(){location.reload()});
 
 //////////////////////////////////////////////    Account Info    /////////////////////////////////////////////////////
 // account info
@@ -151,7 +148,10 @@ function showUsers(data){
         user.role = data[i].customClaims.role;
         result.push(user);
     }
-    console.log(JSON.stringify(result));
+    document.getElementById("overview").hidden = true;
+    document.getElementById("userReport").hidden = true;
+    document.getElementById("performanceReport").hidden = true;
+    
     document.querySelector("#userManageDiv zg-data").data = JSON.stringify(result);
     document.getElementById("userManageDiv").hidden = false; 
     document.querySelector("#userManageDiv zing-grid").refresh();
@@ -164,7 +164,6 @@ function editUser(event){
     getUser({
         email: userEmail
     }).then(result =>{
-        console.log(result.data);
         showUserDialog(result.data);
     })
 }
@@ -208,6 +207,148 @@ function deleteUser(event){
         console.log(result);
     })
 }
+//////////////////////////////////////////////    Overview   /////////////////////////////////////////////////////
+const getSpeedLog = functions.httpsCallable('speed');
+const getBrowserLog = functions.httpsCallable('browsers');
+getSpeedLog().then(res =>{
+    if(res.data.error){
+        alert(res.data.error);
+        return;
+    }else if(res.data.response === undefined){
+        return;
+    }
+    dashboard.speed = JSON.parse(res.data.response);
+    drawOverviewLineChart(dashboard.speed);
+    drawOverviewScatterChart(dashboard.speed);
+});
+getBrowserLog().then(res =>{
+    console.log(res);
+    if(res.data.error){
+        alert(res.data.error);
+        return;
+    }else if(res.data.response === undefined){
+        console.log("Error!");
+        return;
+    }
+    dashboard.browsers = JSON.parse(res.data.response);
+});
+
+function drawOverviewLineChart(data){
+    let visitCount = {};
+    for(var i=0;i<data.length;i++){
+        let d = new Date(parseInt(data[i]['Date-Time']));
+        let date = `${d.getMonth()+1}/${d.getDate()}`;
+        if(visitCount[date] === undefined){
+            visitCount[date] = 1;
+        }else{
+            visitCount[date] +=1;
+        }
+    }
+    Highcharts.chart('overviewLineChart', {
+
+        title: {
+            text: 'Visit Counts'
+        },
+    
+        yAxis: {
+            title: {
+                text: 'Visits'
+            }
+        },
+    
+        xAxis: {
+            categories: Object.keys(visitCount),
+            title: {
+                text: 'Date'
+            }
+        },
+    
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+    
+        series: [{
+            name: 'Visit Count',
+            data: Object.values(visitCount)
+        }],
+    
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+    
+    });
+
+}
+function drawOverviewScatterChart(data){
+    let scatterData = [];
+    for(var i=0;i<data.length;i++){
+        let hour = parseInt(data[i]['Date-Time']);
+        let time = Math.ceil(data[i].visit/60000);
+        scatterData.push([hour, time]);
+    }
+    Highcharts.chart('overviewScatterChart', {
+        chart: {
+          type: 'scatter',
+          zoomType: 'xy'
+        },
+        title: {
+          text: 'Time Visiting Every Hour'
+        },
+        yAxis: {
+          title: {
+            text: 'Time Visiting (min)'
+          }
+        },
+        xAxis: {
+          title: {
+            text: 'Date Time (Unixstamp)'
+          },
+          breaks: [{
+            breakSize: 1000
+            }],
+            labels: {
+                formatter: function() {
+                    let date = new Date(this.value);
+                    return `${date.getMonth()+1}/${date.getDate()}`;
+                }
+            },
+        },
+        plotOptions: {
+          scatter: {
+            marker: {
+              radius: 5,
+              states: {
+                hover: {
+                  enabled: true,
+                  lineColor: 'rgb(100,100,100)'
+                }
+              }
+            },
+            tooltip: {
+              headerFormat: '<b>{series.name}</b><br>',
+              pointFormat: '{point.x}, {point.y} min'
+            }
+          }
+        },
+        series: [{
+          name: 'Visiting Time',
+          data: scatterData
+        }]
+      });
+}
 
 //////////////////////////////////////////////    User Report    /////////////////////////////////////////////////////
 const userReportBtn = document.getElementById("userReportBtn");
@@ -226,17 +367,20 @@ function showUserReport(){
         }
         let result = JSON.parse(res.data.response);
         document.querySelector("#userReport zg-data").data = JSON.stringify(result);
-        drawCharts(result);
+        drawUserCharts(result);
     });
-    document.getElementById("menu").hidden = true;
+    document.getElementById("userManageDiv").hidden = true; 
+    document.getElementById("overview").hidden = true;
+    document.getElementById("performanceReport").hidden = true;
+
     document.getElementById("userReport").hidden = false;
     document.querySelector("#userReport zing-grid").refresh();
+
 }
 
-function drawCharts(data){
+function drawUserCharts(data){
     let browsers = {};
     let os = {};
-    let columnData = [];
     // format browser pie chart data
     for(var i=0;i<data.length;i++){
         let ua = data[i].userAgent;
@@ -404,5 +548,165 @@ const performanceReportBtn = document.getElementById("performanceReportBtn");
 performanceReportBtn.addEventListener('click', showPerformanceReport);
 
 function showPerformanceReport(){
+    const getSpeed = functions.httpsCallable('speed');
+    getSpeed().then(res =>{
+        console.log(res);
+        if(res.data.error){
+            alert(res.data.error);
+            return;
+        }else if(res.data.response === undefined){
+            console.log("Error!");
+            return;
+        }
+        let result = JSON.parse(res.data.response);
+        document.querySelector("#performanceReport zg-data").data = JSON.stringify(result);
+        drawPerformanceCharts(result);
+        drawPerformanceLine(result);
+    });
+    document.getElementById("userManageDiv").hidden = true;  
+    document.getElementById("overview").hidden = true;
+    document.getElementById("userReport").hidden = true;
+
+    document.getElementById("performanceReport").hidden = false;
+    document.querySelector("#performanceReport zing-grid").refresh();
+
+}
+function drawPerformanceCharts(data){
+    console.log("drawing chart")
+    let chartCategories = [];
+    let dom = [];
+    let total = [];
+    let count = (data.length > 10)? 10:data.length;
+    for(var i=0;i<count;i++){
+        chartCategories.push(data[i]['Date-Time']);
+        dom.push(data[i].dom);
+        total.push(data[i].total);
+    }
+    Highcharts.chart('performanceColumnChart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Most Recent Loading Time'
+        },
+        xAxis: {
+            categories: chartCategories,
+            crosshair: true,
+            labels: {
+                formatter: function() {
+                    let date = new Date(parseInt(this.value));
+                    return `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Loading Time(ms)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} ms</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Total',
+            data: total
     
+        }, {
+            name: 'DOM',
+            data: dom
+    
+        }]
+    });
+    
+}
+function drawPerformanceLine(data){
+    let domAvg = [];
+    let totalAvg = [];
+    let count = [];
+    let dateCategories = [];
+    let now = new Date();
+    for(var i=0;i<7;i++){
+        domAvg[i] = 0;
+        totalAvg[i] = 0;
+        count[i] = 0;
+        dateCategories.push(`${now.getMonth()+1}/${now.getDate()-7+i}`);
+    }
+
+    for(var i=0;i<data.length;i++){
+        let time = data[i]['Date-Time'];
+        let date = now.getDate() - new Date(parseInt(time)).getDate();
+        if(date >= 8) break;
+        if(date > 0){
+            count[date-1] += 1;
+            domAvg[date-1] += data[i].dom;
+            totalAvg[date-1] += data[i].total;
+        }
+    }
+    for(var i=0;i<7;i++){
+        if(count[i] > 0){
+            domAvg[i] /= count[i];
+            totalAvg[i] /= count[i];
+        }
+    }
+
+    Highcharts.chart('performanceLineChart', {
+
+        title: {
+            text: 'Average Loading Time'
+        },
+    
+        yAxis: {
+            title: {
+                text: 'Loading Time (ms)'
+            }
+        },
+    
+        xAxis: {
+            categories: dateCategories,
+            accessibility: {
+                rangeDescription: 'Date'
+            }
+        },
+
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+    
+        series: [{
+            name: 'Total',
+            data: totalAvg
+        }, {
+            name: 'DOM',
+            data: domAvg
+        }],
+    
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        } 
+    });
 }

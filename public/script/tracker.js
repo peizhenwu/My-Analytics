@@ -49,6 +49,7 @@ function collectPerformanceData(){
 
 function updateStorage(){
   let id = Date.now();
+  reporter.performanceData.visit = Date.now() - performance.timing.loadEventEnd;
   localStorage.setItem(id, JSON.stringify(reporter));
   console.log(reporter);
 }

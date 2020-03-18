@@ -5,8 +5,8 @@ const db = admin.firestore();
 
 //set response headers
 function setHeaders(response){
-    //response.setHeader('Access-Control-Allow-Origin', 'https://my-analytics-3ed6f.firebaseapp.com');
-    response.setHeader('Access-Control-Allow-Origin',  'http://localhost:5000');
+    response.setHeader('Access-Control-Allow-Origin', 'https://my-analytics-3ed6f.firebaseapp.com');
+    //response.setHeader('Access-Control-Allow-Origin',  'http://localhost:5000');
     response.setHeader('Access-Control-Allow-Credentials', true);
     response.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST, PUT');
     response.setHeader('Access-Control-Expose-Headers', '*');
